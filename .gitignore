@@ -1,3 +1,8 @@
+/projects/msvc/Win32/
+/projects/msvc/x64/
+/projects/unix/_obj*/
+/projects/unix/mupen64plus-rsp-cxd4*.*
+
 *.asm
 *.s
 
