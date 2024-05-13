@@ -123,7 +123,7 @@ endif
 
 ifeq ($(CPU), X86)
   SSE ?= SSE2
-  ifeq ($(SSE), SSE2)
+  ifeq ("$(SSE)", "SSE2")
     CFLAGS   += -msse2
     CPPFLAGS += -DARCH_MIN_SSE2
     POSTFIX = -sse2
