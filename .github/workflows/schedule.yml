@@ -33,10 +33,10 @@ jobs:
         run: |
           export C_CLANG_SUFFIX="-15" C_GCC_SUFFIX="-12"
           export PATH="$(pwd)/../mupen64plus-core/.github/workflows/scripts:${PATH}"
-          export CONFIG_OVERRIDE="SSE=\"SSE2\""
+          export CONFIG_OVERRIDE="SSE="SSE2""
           ci_build.sh ${{ matrix.arch }} ${{ matrix.cc }}
           export OPTFLAGS="-O3 -flto"
-          export CONFIG_OVERRIDE="SSE=\"none\""
+          export CONFIG_OVERRIDE="SSE="none""
           ci_build.sh ${{ matrix.arch }} ${{ matrix.cc }} makepkg
       - name: Upload artifact
         if: matrix.cc == 'GCC'
@@ -81,10 +81,10 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/mupen64plus/mupen64plus-core.git ../mupen64plus-core
           export PATH="$(pwd)/../mupen64plus-core/.github/workflows/scripts:${PATH}"
-          export CONFIG_OVERRIDE="SSE=\"SSE2\""
+          export CONFIG_OVERRIDE="SSE="SSE2""
           ci_build.sh ${{ matrix.arch }} ${{ matrix.cc }}
           export OPTFLAGS="-O3 -flto"
-          export CONFIG_OVERRIDE="SSE=\"none\""
+          export CONFIG_OVERRIDE="SSE="none""
           ci_build.sh ${{ matrix.arch }} ${{ matrix.cc }}
       - name: Backup dependencies, etc...
         run: |

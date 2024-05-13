@@ -76,7 +76,7 @@ NO_ASM ?= 1
 CPU := NONE
 ifneq ("$(filter x86_64 amd64,$(HOST_CPU))","")
   CPU := X86
-  ifeq ("$(BITS)","32")
+  ifeq ("$(BITS)", "32")
     ARCH_DETECTED := 64BITS_32
     PIC ?= 0
   else
@@ -123,7 +123,7 @@ endif
 
 ifeq ($(CPU), X86)
   SSE ?= SSE2
-  ifeq ("$(SSE)","SSE2")
+  ifeq ("$(SSE)", "SSE2")
     CFLAGS   += -msse2
     CPPFLAGS += -DARCH_MIN_SSE2
     POSTFIX = -sse2
