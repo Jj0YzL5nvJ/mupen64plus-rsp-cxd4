@@ -42,10 +42,10 @@
 #define ATTR_FMT(fmtpos, attrpos)
 #endif
 
-static jmp_buf CPU_state;
+static sigjmp_buf CPU_state;
 static void seg_av_handler(int signal_code)
 {
-    longjmp(CPU_state, signal_code);
+    siglongjmp(CPU_state, signal_code);
 }
 static void ISA_op_illegal(int signal_code)
 {
@@ -564,7 +564,7 @@ EXPORT void CALL InitiateRSP(RSP_INFO Rsp_Info, pu32 CycleCount)
 #ifndef _WIN32
     signal(SIGSEGV, seg_av_handler);
     for (SR[ra] = 0; SR[ra] < 0x80000000ul; SR[ra] += 0x200000) {
-        recovered_from_exception = setjmp(CPU_state);
+        recovered_from_exception = sigsetjmp(CPU_state, 1);
         if (recovered_from_exception)
             break;
         SR[at] += DRAM[SR[ra]];
