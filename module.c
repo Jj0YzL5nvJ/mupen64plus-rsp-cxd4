@@ -13,6 +13,8 @@
 * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.             *
 \******************************************************************************/
 
+#define _POSIX_SOURCE 1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -562,13 +564,16 @@ EXPORT void CALL InitiateRSP(RSP_INFO Rsp_Info, pu32 CycleCount)
 
     signal(SIGILL, ISA_op_illegal);
 #ifndef _WIN32
-    signal(SIGSEGV, seg_av_handler);
+    struct sigaction sa = {.sa_handler = seg_av_handler};
+    struct sigaction prev_sa;
+    sigaction(SIGSEGV, &sa, &prev_sa);
     for (SR[ra] = 0; SR[ra] < 0x80000000ul; SR[ra] += 0x200000) {
         recovered_from_exception = setjmp(CPU_state);
         if (recovered_from_exception)
             break;
         SR[at] += DRAM[SR[ra]];
     }
+    sigaction(SIGSEGV, &prev_sa, NULL);
     for (SR[at] = 0; SR[at] < 31; SR[at]++) {
         SR[ra] = (SR[ra] & ~1) >> 1;
         if (SR[ra] == 0)
