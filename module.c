@@ -42,7 +42,7 @@
 #define ATTR_FMT(fmtpos, attrpos)
 #endif
 
-#ifndef _WIN32
+#ifndef WIN32
 static sigjmp_buf CPU_state;
 static void seg_av_handler(int signal_code)
 {
