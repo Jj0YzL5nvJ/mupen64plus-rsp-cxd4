@@ -43,10 +43,10 @@
 #endif
 
 #ifndef WIN32
-static jmp_buf CPU_state;
+static sigjmp_buf CPU_state;
 static void seg_av_handler(int signal_code)
 {
-    longjmp(CPU_state, signal_code);
+    siglongjmp(CPU_state, signal_code);
 }
 #endif
 static void ISA_op_illegal(int signal_code)
@@ -522,10 +522,6 @@ void no_LLE(void)
 }
 EXPORT void CALL InitiateRSP(RSP_INFO Rsp_Info, pu32 CycleCount)
 {
-#ifndef _WIN32
-    int recovered_from_exception;
-#endif
-
     if (CycleCount != NULL) /* cycle-accuracy not doable with today's hosts */
         *CycleCount = 0;
     update_conf(CFG_FILE);
@@ -568,7 +564,7 @@ EXPORT void CALL InitiateRSP(RSP_INFO Rsp_Info, pu32 CycleCount)
 #ifndef _WIN32
     signal(SIGSEGV, seg_av_handler);
     for (SR[ra] = 0; SR[ra] < 0x80000000ul; SR[ra] += 0x200000) {
-        recovered_from_exception = setjmp(CPU_state);
+        int recovered_from_exception = sigsetjmp(CPU_state, 1);
         if (recovered_from_exception)
             break;
         SR[at] += DRAM[SR[ra]];
